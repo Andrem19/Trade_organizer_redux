@@ -1,0 +1,8 @@
+function updateTitle() {
+setState(prev => {
+return{
+...prev, title: 'New title'
+}
+})
+}
+profit = (appState.coinList.quotes.USD.price*coins) - parseFloat(valueOfCoins)
