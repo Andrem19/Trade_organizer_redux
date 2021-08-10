@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import {loadState, saveState} from '../localStorage'
+import {deletePost} from '../redux/actions'
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -48,7 +49,7 @@ const ExpandableTableRow = ({ children, expandComponent, ...otherProps }) => {
   );
 };
 
-const List = ({syncPosts, rawsMap, removeTask, toggleTask1, toggleTask2, toggleTask3}) => {
+const List = ({syncPosts, deletePost, rawsMap, removeTask, toggleTask1, toggleTask2, toggleTask3}) => {
   const classes = useStyles();
 
   const amountOfSell1 = rawsMap.amount2-rawsMap.val/rawsMap.step1
@@ -68,7 +69,7 @@ const List = ({syncPosts, rawsMap, removeTask, toggleTask1, toggleTask2, toggleT
 
         <TableHead>
           <TableRow>
-            <TableCell padding="checkbox"><div onClick={() => removeTask(rawsMap.id)} className="del"><IconButton className="del" aria-label="delete"><DeleteIcon /></IconButton></div> </TableCell>
+            <TableCell padding="checkbox"><div onClick={() => deletePost(rawsMap.id)} className="del"><IconButton className="del" aria-label="delete"><DeleteIcon /></IconButton></div> </TableCell>
             <TableCell align="left">COIN</TableCell>
             <TableCell align="right">VALUE</TableCell>
             <TableCell align="right">AMOUNT</TableCell>
@@ -132,5 +133,8 @@ const mapStateToProps = state => {
     syncPosts: state.posts.posts
   }
 }
+const mapDispatchToProps = dispatch => ({
+  deletePost: key => dispatch(deletePost(key))
+})
 
-export default connect(mapStateToProps, null)(List)
+export default connect(mapStateToProps, mapDispatchToProps)(List)
