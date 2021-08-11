@@ -1,7 +1,9 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { connect } from 'react-redux';
 
+
 const Dashboard = ({syncPosts}) => {
+
     return (
         <div>
           <div>
@@ -16,7 +18,7 @@ const Dashboard = ({syncPosts}) => {
 }
 const mapStateToProps = state => {
   return {
-    syncPosts: state.posts.posts
+    syncPosts: state.posts.posts,
   }
 }
 

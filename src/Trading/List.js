@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
-import {loadState, saveState} from '../localStorage'
-import {deletePost} from '../redux/actions'
+import {deletePost, changeStyles1, changeStyles2, changeStyles3} from '../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import {fetchPosts} from '../redux/actions';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -49,7 +50,7 @@ const ExpandableTableRow = ({ children, expandComponent, ...otherProps }) => {
   );
 };
 
-const List = ({syncPosts, deletePost, rawsMap, removeTask, toggleTask1, toggleTask2, toggleTask3}) => {
+const List = ({syncPosts, changeStyles1, changeStyles2, changeStyles3, deletePost, rawsMap}) => {
   const classes = useStyles();
 
   const amountOfSell1 = rawsMap.amount2-rawsMap.val/rawsMap.step1
@@ -60,6 +61,17 @@ const List = ({syncPosts, deletePost, rawsMap, removeTask, toggleTask1, toggleTa
   const className2 = rawsMap.complete2 ? 'x' : 'xx'
   const className3 = rawsMap.complete3 ? 'x' : 'xx'
 
+
+  //Fetch cryptoList
+  const dispatch = useDispatch()
+  const cryptos = useSelector((state) => {
+    return state.posts.fetchedPosts
+  })
+  useEffect(() => {
+  dispatch(fetchPosts())
+  }, [])
+
+const filt = Object.values(cryptos).filter(cryp => cryp.symbol == rawsMap.name).map((n) => (n.quotes.USD.price))*rawsMap.amount-rawsMap.val
 
   return (
     <div className="withdel">
@@ -85,9 +97,9 @@ const List = ({syncPosts, deletePost, rawsMap, removeTask, toggleTask1, toggleTa
 
    <TableHead className="tablerow">
       <TableRow>
-         <TableCell align="left"><div onClick={rawsMap.d1 ? () => toggleTask1(rawsMap.id, amountOfSell1) : ""}className="d">x </div>Sell Price 1</TableCell>
-         <TableCell align="left"><div onClick={rawsMap.d2 && !rawsMap.d1 ? () => toggleTask2(rawsMap.id, amountOfSell2) : ""}className="d">x </div>Sell Price 2</TableCell>
-         <TableCell align="left"><div onClick={rawsMap.d3 && !rawsMap.d1 && !rawsMap.d2 ? () => toggleTask3(rawsMap.id, amountOfSell3) : ""}className="d">x </div>Sell Price 3</TableCell>
+         <TableCell align="left"><div onClick={rawsMap.d1 ? () => changeStyles1(rawsMap.id, amountOfSell1) : ''}className="d">x </div>Sell Price 1</TableCell>
+         <TableCell align="left"><div onClick={rawsMap.d2 && !rawsMap.d1 ? () => changeStyles2(rawsMap.id, amountOfSell2) : ''}className="d">x </div>Sell Price 2</TableCell>
+         <TableCell align="left"><div onClick={rawsMap.d3 && !rawsMap.d1 && !rawsMap.d2 ? () => changeStyles3(rawsMap.id, amountOfSell3) : ''}className="d">x </div>Sell Price 3</TableCell>
          <TableCell align="left">Profit/Lose</TableCell>
       </TableRow>
    </TableHead>
@@ -97,7 +109,7 @@ const List = ({syncPosts, deletePost, rawsMap, removeTask, toggleTask1, toggleTa
               <TableCell className={className1} align="right">{((parseInt(rawsMap.step1 * 100)) / 100)}</TableCell>
               <TableCell className={className2} align="right">{((parseInt(rawsMap.step2 * 100)) / 100)}</TableCell>
               <TableCell className={className3} align="right">{((parseInt(rawsMap.step3 * 100)) / 100)}</TableCell>
-            <TableCell align="right"></TableCell>
+            <TableCell align="right">{filt.toFixed(3)}</TableCell>
           </TableRow>
 
           <TableRow key={rawsMap.id}>
@@ -134,7 +146,10 @@ const mapStateToProps = state => {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  deletePost: key => dispatch(deletePost(key))
+  deletePost: key => dispatch(deletePost(key)),
+  changeStyles1: (key, amountOfSell1) => dispatch(changeStyles1(key, amountOfSell1)),
+  changeStyles2: (key, amountOfSell2) => dispatch(changeStyles2(key, amountOfSell2)),
+  changeStyles3: (key, amountOfSell3) => dispatch(changeStyles3(key, amountOfSell3))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(List)

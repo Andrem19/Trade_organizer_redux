@@ -2,13 +2,16 @@ import React from 'react';
 import { render } from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {compose, createStore } from 'redux';
+import {compose, createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk'
 import {rootReducer} from './redux/rootReducer'
 import {loadState, saveState} from './localStorage'
 
 const persistedState = loadState();
-const store = createStore(rootReducer, persistedState, compose(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()))
+const store = createStore(rootReducer, persistedState, compose(
+applyMiddleware(thunk),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()))
 
 store.subscribe(() => {
   saveState(store.getState())

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
-import {createPost} from '../redux/actions'
+import {createPost, fetchPosts} from '../redux/actions'
+import { useDispatch, useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import FilledInput from '@material-ui/core/FilledInput';
@@ -26,13 +27,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ToDoForm = ({ createPost, addPosition }) => {
+const ToDoForm = ({createPost, addPosition }) => {
   const classes = useStyles();
 
     const [nameOfCoin, setNameOfCoin] = useState('')
     const [valueOfCoins, setValueOfCoins] = useState('')
     const [numberOfCoins, setNumberOfCoins] = useState('')
     const [plan, setPlan] = useState('')
+    const [open, setOpen] = useState(false);
+
+    //Fetch cryptoList
+    const dispatch = useDispatch()
+    const cryptoTab = useSelector((state) => {
+      return state.posts.fetchedPosts
+    })
+    useEffect(() => {
+    dispatch(fetchPosts())
+    }, [])
+
+  let crypto = Object.values(cryptoTab).filter(cryp => cryp.id == "eth-ethereum" || cryp.id == "btc-bitcoin" || cryp.id == "ada-cardano" || cryp.id == "cake-pancakeswap" || cryp.id == "dot-polkadot" || cryp.id == "xrp-xrp" || cryp.id == "bnb-binance-coin" || cryp.id == "matic-polygon" || cryp.id == "uni-uniswap")
+
+
+    //-------------------
 
       const handleSubmit = (event) => {
           event.preventDefault()
@@ -42,14 +58,15 @@ const ToDoForm = ({ createPost, addPosition }) => {
           setNumberOfCoins("")
           setPlan("")
         }
+        const handleChange = (event) => {
+          setNameOfCoin(event.target.value);
+        };
 
         const handlekeyPress = (event) => {
           if(event.key === "Enter") {
             handleSubmit(event)
           }
         }
-
-        const [open, setOpen] = useState(false);
 
         const handleClose = () => {
           setOpen(false);
@@ -63,9 +80,25 @@ const ToDoForm = ({ createPost, addPosition }) => {
      <div className="center">
        <form onSubmit={handleSubmit} className={classes.root} noValidate autoComplete="on">
 
-         <FormControl className="input">
-           <InputLabel htmlFor="component-simple">Coin</InputLabel>
-           <Input id="component-simple" type='text' onKeyDown={handlekeyPress} value={nameOfCoin} onChange={event => setNameOfCoin(event.target.value)} />
+         <FormControl className={classes.formControl}>
+           <InputLabel id="demo-controlled-open-select-label">Coin</InputLabel>
+           <Select
+             labelId="demo-controlled-open-select-label"
+             id="demo-controlled-open-select"
+             open={open}
+             onClose={handleClose}
+             onOpen={handleOpen}
+             value={nameOfCoin}
+             onChange={handleChange}
+           >
+             <MenuItem value="">
+               <em>None</em>
+             </MenuItem>
+             {crypto.map((coin) => (
+             <MenuItem key={coin.id} value={coin.symbol}>{coin.name}</MenuItem>
+
+           ))}
+           </Select>
          </FormControl>
 
        <FormControl className="input">

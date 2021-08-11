@@ -40,9 +40,6 @@ const Trading = ({createPost, syncPosts}) => {
     }
   }
 
-  const removeTask = (id) => {
-    setPosition([...position.filter((todo) => todo.id !== id)])
-  }
   const handleToggle1 = (id, amountOfSell1) => {
     setPosition([
       ...position.map((todo) =>
@@ -71,7 +68,6 @@ const Trading = ({createPost, syncPosts}) => {
                 return (
             <List
               rawsMap={rawsMap}
-              removeTask={removeTask}
               toggleTask1={handleToggle1}
               toggleTask2={handleToggle2}
               toggleTask3={handleToggle3}
