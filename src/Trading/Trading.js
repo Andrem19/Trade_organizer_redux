@@ -40,25 +40,6 @@ const Trading = ({createPost, syncPosts}) => {
     }
   }
 
-  const handleToggle1 = (id, amountOfSell1) => {
-    setPosition([
-      ...position.map((todo) =>
-    todo.id === id ? { ...todo, complete1: !todo.complete1, buyPrice: todo.step1, amount: todo.amount-amountOfSell1, d1: false} : {...todo})
-    ])
-  }
-
-  const handleToggle2 = (id, amountOfSell2) => {
-    setPosition([
-      ...position.map((todo) =>
-    todo.id === id ? { ...todo, complete2: !todo.complete2, buyPrice: todo.step2, amount: todo.amount-amountOfSell2, d2: false} : {...todo})
-    ])
-  }
-  const handleToggle3 = (id, amountOfSell3) => {
-    setPosition([
-      ...position.map((todo) =>
-    todo.id === id ? { ...todo, complete3: !todo.complete3, buyPrice: todo.step3, amount: todo.amount-amountOfSell3, d3: false} : {...todo})
-    ])
-  }
 
     return (
         <div>
@@ -68,9 +49,6 @@ const Trading = ({createPost, syncPosts}) => {
                 return (
             <List
               rawsMap={rawsMap}
-              toggleTask1={handleToggle1}
-              toggleTask2={handleToggle2}
-              toggleTask3={handleToggle3}
               />
             )
             })}
