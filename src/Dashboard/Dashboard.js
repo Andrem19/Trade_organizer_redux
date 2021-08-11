@@ -4,21 +4,26 @@ import { connect } from 'react-redux';
 
 const Dashboard = ({syncPosts}) => {
 
+  
+
     return (
+      <div>
         <div>
-          <div>
-            <ul>
-              {syncPosts.map(post => {
-                return <li key={post.id}>{post.name}</li>
-              })}
-            </ul>
-          </div>
+          <ul>
+            {syncPosts.map((post) => (
+              <tr key={post.id}>
+                <li>{post.name}</li>
+                <li>{post.amount}</li>
+              </tr>
+            ))}
+          </ul>
         </div>
+      </div>
     )
 }
 const mapStateToProps = state => {
   return {
-    syncPosts: state.posts.posts,
+    syncPosts: state.posts.posts
   }
 }
 

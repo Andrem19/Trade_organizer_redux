@@ -11,6 +11,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const useStyles = makeStyles({
   table: {
@@ -21,14 +22,23 @@ const useStyles = makeStyles({
 const  Info = () => {
 const classes = useStyles();
 
-const dispatch = useDispatch()
-const cryptoTable = useSelector(state => state.posts.fetchedPosts)
-
-let crypto = Object.values(cryptoTable).filter(cryp => cryp.id == "eth-ethereum" || cryp.id == "btc-bitcoin" || cryp.id == "ada-cardano" || cryp.id == "cake-pancakeswap" || cryp.id == "dot-polkadot" || cryp.id == "xrp-xrp" || cryp.id == "bnb-binance-coin" || cryp.id == "matic-polygon" || cryp.id == "uni-uniswap")
-
 useEffect(() => {
 dispatch(fetchPosts())
 },[])
+
+const dispatch = useDispatch()
+const cryptoTable = useSelector(state => state.posts.fetchedPosts)
+
+const loading = useSelector(state => state.app.loading)
+
+if (loading) {
+  return (
+    <LinearProgress />
+  )
+}
+
+
+let crypto = Object.values(cryptoTable).filter(cryp => cryp.id == "eth-ethereum" || cryp.id == "btc-bitcoin" || cryp.id == "ada-cardano" || cryp.id == "cake-pancakeswap" || cryp.id == "dot-polkadot" || cryp.id == "xrp-xrp" || cryp.id == "bnb-binance-coin" || cryp.id == "matic-polygon" || cryp.id == "uni-uniswap")
 
     return (
       <div>
